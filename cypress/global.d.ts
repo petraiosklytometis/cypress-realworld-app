@@ -44,8 +44,8 @@ declare namespace Cypress {
      */
     visualSnapshot(maybeName?): Chainable<any>;
 
-    getBySel(dataTestAttribute: string, args?: any): Chainable<Element>;
-    getBySelLike(dataTestPrefixAttribute: string, args?: any): Chainable<Element>;
+    getBySel(dataTestAttribute: string, args?: any): Chainable<JQuery<HTMLElement>>;
+    getBySelLike(dataTestPrefixAttribute: string, args?: any): Chainable<JQuery<HTMLElement>>;
 
     /**
      *  Cypress task for directly querying to the database within tests
@@ -73,7 +73,7 @@ declare namespace Cypress {
     /**
      * Filter for data entities via database query
      */
-    database(operation: "filter", entity: string, query?: object, log?: boolean): Chainable<any[]>;
+    database(operation: "filter", entity: string, query?: object, log?: boolean): Chainable<any>;
 
     /**
      * Fetch React component instance associated with received element subject
@@ -116,6 +116,11 @@ declare namespace Cypress {
     loginByOktaApi(username: string, password?: string): Chainable<Response>;
 
     /**
+     * Logs-in user by navigating to Okta tenant with cy.origin()
+     */
+    loginByOkta(username: string, password: string): Chainable<Response>;
+
+    /**
      * Logs in bypassing UI by triggering XState login event
      */
     loginByXstate(username: string, password?: string): Chainable<any>;
@@ -123,12 +128,12 @@ declare namespace Cypress {
     /**
      * Logs out via bypassing UI by triggering XState logout event
      */
-    logoutByXstate(): Chainable<void>;
+    logoutByXstate(): Chainable<string>;
 
     /**
-     * Logs in via Auth0 API
+     * Logs in via Auth0 login page
      */
-    loginByAuth0Api(username: string, password?: string): Chainable<any>;
+    loginToAuth0(username: string, password: string): Chainable<any>;
 
     /**
      * Switch current user by logging out current user and logging as user with specified username
@@ -144,5 +149,10 @@ declare namespace Cypress {
      * Logs in to AWS Cognito via Amplify Auth API bypassing UI using Cypress Task
      */
     loginByCognitoApi(username: string, password: string): Chainable<any>;
+
+    /**
+     * Logs in to AWS Cognito Federated via cy.origin()
+     */
+    loginByCognito(username: string, password: string): Chainable<any>;
   }
 }

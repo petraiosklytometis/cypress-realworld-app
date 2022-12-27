@@ -1,6 +1,6 @@
 /* istanbul ignore next */
 import React, { useEffect } from "react";
-import { useService, useMachine } from "@xstate/react";
+import { useActor, useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 // @ts-ignore
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const AppOkta: React.FC = () => {
   const { authState: oktaAuthState, oktaAuth: oktaAuthService } = useOktaAuth();
   const classes = useStyles();
-  const [authState] = useService(authService);
+  const [authState] = useActor(authService);
   const [, , notificationsService] = useMachine(notificationsMachine);
 
   const [, , snackbarService] = useMachine(snackbarMachine);
@@ -39,7 +39,7 @@ const AppOkta: React.FC = () => {
   const [, , bankAccountsService] = useMachine(bankAccountsMachine);
 
   // @ts-ignore
-  if (window.Cypress) {
+  if (window.Cypress && process.env.REACT_APP_OKTA_PROGRAMMATIC) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const okta = JSON.parse(localStorage.getItem("oktaCypress")!);
@@ -89,6 +89,7 @@ const AppOkta: React.FC = () => {
   );
 };
 
-//@ts-ignore
-let appOkta = window.Cypress ? AppOkta : withOktaAuth(AppOkta);
+let appOkta =
+  //@ts-ignore
+  window.Cypress && process.env.REACT_APP_OKTA_PROGRAMMATIC ? AppOkta : withOktaAuth(AppOkta);
 export default appOkta;
